@@ -212,13 +212,13 @@ input[type=range].anim-slider {
     var zoomin_id = "_anim_zoomin";
     var gc_cnt = 611;
     var frames = new Array(gc_cnt);
-    var img_dir = "imgs/img_fixtick/"
+    var img_dir = "imgs/hs_fixtick/"
     for (let i = 1; i <= gc_cnt; i++) {
         frames[i-1] = img_dir + "Before GC" + i + ".png";
     }
 
     setTimeout(function() {
-        anim = new Animation(frames, img_id, slider_id, zoomin_id, 2000.0);
+        anim = new Animation(frames, img_id, slider_id, zoomin_id, 1000.0);
     }, 0);
   })()
 </script>
