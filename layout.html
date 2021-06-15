@@ -220,12 +220,12 @@ input[type=range].anim-slider {
     var img_id = "_anim_img";
     var slider_id = "_anim_slider";
     var zoomin_id = "_anim_zoomin";
-    var gc_cnt = 97;
+    var gc_cnt = 96;
     var frames = new Array(gc_cnt * 2);
     var img_root = "imgs/layout_fixtick/"
     for (let i = 1; i <= gc_cnt; i++) {
-        frames[(i-1)*2] = img_root+"Before GC" + i + ".png";
-        frames[(i-1)*2 + 1] = img_root+"After GC" + i + ".png";
+        frames[(i-1)*2] = img_root+"Before GC " + i + ".png";
+        frames[(i-1)*2 + 1] = img_root+"After GC " + i + ".png";
     }
 
     setTimeout(function() {
