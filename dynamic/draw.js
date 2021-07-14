@@ -186,5 +186,6 @@ function draw(json) {
         animation: false
     };
 
+    myChart.hideLoading();
     myChart.setOption(option);
 }

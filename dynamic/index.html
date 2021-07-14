@@ -39,6 +39,7 @@
     <script type="text/javascript">
 
         function LoadSnapshot(gc_cnt, is_before_gc) {
+            myChart.showLoading();
             var url = "snapshots/heap_dump_" + gc_cnt + "_";
             if (is_before_gc) {
                 url += "0.json";
