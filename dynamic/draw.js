@@ -121,13 +121,13 @@ function draw(json) {
     var bar_type = page_names.concat(['objs']);
 
     var option = {
-        // dataZoom: {
-        //     id: 'dataZoomX',
-        //     type: 'inside',
-        //     xAxisIndex: [0],
-        //     // filterMode: 'filter'
-        //     realtime: false
-        // },
+        dataZoom: {
+            id: 'dataZoomX',
+            type: 'inside',
+            xAxisIndex: [0],
+            // filterMode: 'filter'
+            realtime: false
+        },
         legend: {
             show: true,
             data: bar_type
