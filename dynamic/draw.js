@@ -58,15 +58,15 @@ function merge_objs(objs) {
 
 function renderItem(params, api) {
     var start = api.coord([api.value(0), api.value(3)]);
-    var end = api.coord([api.value(1),api.value(3)]);
-    var height = api.size([0,1])[1];
+    var end = api.coord([api.value(1), api.value(3)]);
+    var height = api.size([0, 1])[1];
     var style = api.style();
 
     return {
         type: 'rect',
         shape: {
             x: start[0],
-            y: start[1]-height/2,
+            y: start[1] - height / 2,
             width: end[0] - start[0],
             height: height
         },
@@ -142,23 +142,28 @@ function draw(json) {
             name: 'Address offset in heap(MB)',
             nameLocation: 'center',
             nameTextStyle: {
-                fontSize: 25
+                // lineHeight: 100,
+                fontSize: 25,
+                padding: [30, 0, 50, 0]
             },
-            nameGap: 30,
+            // nameGap: 0,
             type: 'value',
             min: 0,
             max: addr_max - addr_min,
             // // minInterval: 1024 * 1024,
             // // maxInterval: 1024 * 1024,
-            interval: 1024 * 1024 * 4,
+            // interval: 1024 * 1024 * 4,
             axisLabel: {
+                rotate: 0,
                 formatter: function (value, index) {
-                    return value / 1024 / 1024;
+                    value = value / 1024 / 1024;
+                    value = value.toFixed(3);
+                    return value;
                 }
             }
         },
         yAxis: {
-            data:['Object','Page']
+            data: ['Object', 'Page']
         },
         series: [{
             type: 'custom',
