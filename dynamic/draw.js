@@ -58,16 +58,17 @@ function merge_objs(objs) {
 
 function renderItem(params, api) {
     var start = api.coord([api.value(0), api.value(3)]);
-    var size = api.size([api.value(1) - api.value(0), api.value(4)]);
+    var end = api.coord([api.value(1),api.value(3)]);
+    var height = api.size([0,1])[1];
     var style = api.style();
 
     return {
         type: 'rect',
         shape: {
             x: start[0],
-            y: start[1],
-            width: size[0],
-            height: size[1]
+            y: start[1]-height/2,
+            width: end[0] - start[0],
+            height: height
         },
         style: style
     };
@@ -91,7 +92,7 @@ function draw(json) {
 
         var page_data = json[page_names[idx]].map(function (item, index) {
             // addr_head, addr_tail, mem_size, bar_y, bar_heigth, name
-            var ret_value = [item[0], item[0] + item[1], item[1], 10, 5, page_names[idx]];
+            var ret_value = [item[0], item[0] + item[1], item[1], 1, 1, page_names[idx]];
 
             return {
                 value: ret_value,
@@ -106,7 +107,7 @@ function draw(json) {
     for (let obj_name of obj_names) {
         var obj_data = json[obj_name].map(function (item, index) {
             // addr_head, addr_tail, mem_size, bar_y, bar_heigth, name
-            var ret_value = [item[0], item[0] + item[1], item[1], 5, 5, 'objects'];
+            var ret_value = [item[0], item[0] + item[1], item[1], 0, 1, 'objects'];
 
             return {
                 value: ret_value,
@@ -125,8 +126,7 @@ function draw(json) {
             id: 'dataZoomX',
             type: 'inside',
             xAxisIndex: [0],
-            // filterMode: 'filter'
-            realtime: false
+            filterMode: 'weakFilter',
         },
         legend: {
             show: true,
@@ -158,6 +158,7 @@ function draw(json) {
             }
         },
         yAxis: {
+            data:['Object','Page']
         },
         series: [{
             type: 'custom',
