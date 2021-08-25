@@ -1,3 +1,18 @@
+const data_source_root = "data/";
+
+var data_category = "default/";
+
+function setDataSourceCategory(category) {
+    if (category == "") {
+        category = "default/";
+    }
+    data_category = category;
+    let len = category.length;
+    if (data_category[len - 1] != '/') {
+        data_category += "/";
+    }
+}
+
 function xhrSuccess() {
     this.callback.apply(this, this.arguments);
 }
