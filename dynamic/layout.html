@@ -5,21 +5,24 @@
     <meta charset="utf-8">
     <title>Heap Layout Demo</title>
     <script src="echarts.min.js"></script>
+    <script src="utils.js"></script>
+    <script src="layout.js"></script>
+    <script src="draw_size_line.js"></script>
     <script src="draw_layout.js"></script>
     <script src="set_table.js"></script>
-    <script src="utils.js"></script>
+
+
 </head>
 
 <body>
-    <div id="category_selector">
+    <div style="height: 10vh;">
         Category:
-        <br>
-        <input id="category_input" type="text" name="category" value="defalut">
-        <br>
-        <button type="button" style="width: 100px;" onclick="OnSetCategoryClick()">Set</button>
-    </div>
+        <select id="category_selector" onchange="OnDataCategoryChange(this.value)">
 
-    <div id="chart" style="width: 100%; height: 50vh;"></div>
+        </select>
+    </div>
+    <div id="size_line_chart" style=" width: 100%; height: 25vh;"></div>
+    <div id="layout_chart" style="width: 100%; height: 25vh;"></div>
     <div style="width: 100%; padding: 50px 0px; text-align:center;">
         <table id="summary table" border="1" style="margin: 0 auto;">
             <tr>
@@ -59,104 +62,29 @@
         </table>
     </div>
 
-    <div class="slideContainer" style="text-align:center">
+    <!-- <div class="slideContainer" style="text-align:center">
         <input type="range" style="width: 60%; height: 30px;" min="1" max="1" value="1" class="slider" id="myRange"
             onchange="OnMyRangeChange(this.value)">
-    </div>
+    </div> -->
 
     <div class="buttonContainer" style="text-align:center">
         <button type="button" style="height: 50px; width: 100px;" onclick="OnPrevClick()">Prev</button>
         <button type="button" style="height: 50px; width: 100px;" onclick="OnNextClick()">Next</button>
     </div>
 
-    <script type="text/javascript">
-        var summary_table = document.getElementById("summary table")
 
-        function LoadSnapshot(gc_cnt, is_before_gc) {
-            myChart.showLoading();
-            var url = data_source_root + data_category + "snapshots/heap_dump_" + gc_cnt + "_";
-            if (is_before_gc) {
-                url += "0.json";
-            }
-            else {
-                url += "1.json";
-            }
-            var request = new XMLHttpRequest();
-            request.open("get", url, true);
-            request.send(null);
-            request.onload = function () {
-                if (request.status == 200) {
-                    var json = JSON.parse(request.responseText);
-                    drawLayout(json);
-                    SetSummaryTable(summary_table, json);
-                }
-            }
-        }
-
-        function InitChart() {
-            var request = new XMLHttpRequest();
-            var url = data_source_root + data_category + "mem_range.log"
-
-            request.open("get", url, true);
-            request.send(null);
-            request.onload = function () {
-                if (request.status == 200) {
-                    var addrs = request.responseText.split('\n');
-                    addr_min = parseInt(addrs[0], 16);
-                    addr_max = parseInt(addrs[1], 16);
-                }
-
-                var url = data_source_root + data_category + "gc_cnt.log"
-                request.open("get", url, true);
-                request.send(null);
-                request.onload = function () {
-                    if (request.status == 200) {
-                        gc_amount = parseInt(request.responseText);
-                        document.getElementById("myRange").max = gc_amount * 2;
-                        LoadSnapshot(1, true);
-                    }
-                }
-            }
-        }
-
-        function OnMyRangeChange(value) {
-            var gc_cnt = Math.ceil(value / 2);
-            var is_before_gc = value % 2;
-            LoadSnapshot(gc_cnt, is_before_gc);
-        }
-
-        function OnPrevClick() {
-            var silder = document.getElementById('myRange');
-            if (silder.vaule === silder.min) {
-                return;
-            }
-            silder.value--;
-            OnMyRangeChange(silder.value);
-        }
-
-        function OnNextClick() {
-            var silder = document.getElementById('myRange');
-            if (silder.vaule === silder.max) {
-                return;
-            }
-            silder.value++;
-            OnMyRangeChange(silder.value);
-        }
-
-        function OnSetCategoryClick() {
-            var category_input = document.getElementById('category_input');
-            setDataSourceCategory(category_input.value);
-            InitChart();
-        }
-
-
-    </script>
 
     <script type="text/javascript">
         var gc_amount = 0;
-        var myChart = echarts.init(document.getElementById('chart'), null, { renderer: 'canvas' });
+        var size_line_chart = echarts.init(document.getElementById('size_line_chart'), null, { renderer: 'canvas' });
+        var layout_chart = echarts.init(document.getElementById('layout_chart'), null, { renderer: 'canvas' });
+        var summary_table = document.getElementById("summary table")
+        window.onload = function () {
+            InitCategory();
+            RefreshCharts();
+        };
 
-        window.onload = InitChart;
+
     </script>
 </body>
 

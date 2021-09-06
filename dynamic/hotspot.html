@@ -79,9 +79,9 @@
                 access_count_max = parseInt(this.responseText);
             }
 
-            loadFile(data_source_root + data_category + "mem_range.log", onLoadMemRange)
-            loadFile(data_source_root + data_category + "snapshots_hotspot/max_page_access_count.log", onLoadMaxAccessCount)
-            loadFile(data_source_root + data_category + "gc_cnt.log", onLoadGcCnt)
+            LoadFile(data_source_root + data_category + "mem_range.log", onLoadMemRange)
+            LoadFile(data_source_root + data_category + "snapshots_hotspot/max_page_access_count.log", onLoadMaxAccessCount)
+            LoadFile(data_source_root + data_category + "gc_cnt.log", onLoadGcCnt)
         }
 
         function OnMyRangeChange(value) {
@@ -108,7 +108,7 @@
 
         function OnSetCategoryClick() {
             var category_input = document.getElementById('category_input');
-            setDataSourceCategory(category_input.value);
+            SetDataSourceCategory(category_input.value);
             InitChart();
         }
     </script>
