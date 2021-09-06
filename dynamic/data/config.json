@@ -1,0 +1,3 @@
+{
+    "white_list": ["default","hugepage_only_madv","hugepage_2M_v8page"]
+}
