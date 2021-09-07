@@ -129,7 +129,8 @@ function DrawSizeLine(json_size_trend) {
         },
         legend: {
             data: trend_line_names,
-            top: "6%"
+            top: "6%",
+            type: 'scroll',
         },
 
         xAxis: {
@@ -157,7 +158,6 @@ function DrawSizeLine(json_size_trend) {
     option.series.push(GetMarkAreaData());
     size_line_chart.hideLoading();
     size_line_chart.setOption(option);
-
     size_line_chart.getZr().on('click', function (event) {
         // TODO. This is shit, need to find a better way.
         let key = function GetCurrentCategoryKey() {

@@ -65,6 +65,8 @@ def run():
     data_categorys = os.listdir(data_root)
     for data_category in data_categorys:
         category_path = os.path.join(data_root, data_category)
+        if os.path.isfile(category_path):
+            continue
         MergeSizeInfoInCategory(category_path)
 
 

@@ -10,19 +10,28 @@
     <script src="draw_size_line.js"></script>
     <script src="draw_layout.js"></script>
     <script src="set_table.js"></script>
-
-
 </head>
 
 <body>
-    <div style="height: 10vh;">
+    <div>
         Category:
         <select id="category_selector" onchange="OnDataCategoryChange(this.value)">
-
         </select>
     </div>
-    <div id="size_line_chart" style=" width: 100%; height: 25vh;"></div>
-    <div id="layout_chart" style="width: 100%; height: 25vh;"></div>
+    <div id="readme">
+        <h3>Readme</h3>
+        <h4>Size Trend Chart</h4>
+        <p>This chart shows the page size sum and object size sum of each space. The xaxis means the timing before or
+            after one GC. For example: B6 means timing before 6th GC, A6 means timing after 6th GC. The marked grey area
+            means
+            mark-compact gc and others are scavenge gc.</p>
+        <h4>Heap Layout Chart</h4>
+        <p>This chart shows the layout of each space in the v8 heap, and the table below it shows the page size sum and
+            object size sum of each space.You can click the Size Trend Chart to select the
+            timing before or after any GC to observe the layout.</p>
+    </div>
+    <div id="size_line_chart" style=" width: 100%; height: 40vh;"></div>
+    <div id="layout_chart" style="width: 100%; height: 40vh;"></div>
     <div style="width: 100%; padding: 50px 0px; text-align:center;">
         <table id="summary table" border="1" style="margin: 0 auto;">
             <tr>
@@ -79,6 +88,11 @@
         var size_line_chart = echarts.init(document.getElementById('size_line_chart'), null, { renderer: 'canvas' });
         var layout_chart = echarts.init(document.getElementById('layout_chart'), null, { renderer: 'canvas' });
         var summary_table = document.getElementById("summary table")
+        window.onresize = function () {
+            size_line_chart.resize();
+            layout_chart.resize();
+        };
+
         window.onload = function () {
             InitCategory();
             RefreshCharts();

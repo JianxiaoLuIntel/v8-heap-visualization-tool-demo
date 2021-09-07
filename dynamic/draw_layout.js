@@ -148,7 +148,8 @@ function drawLayout(json) {
         legend: {
             show: true,
             data: bar_type,
-            top: "6%"
+            top: "6%",
+            type: 'scroll',
         },
         title: {
             text: GetTitle(),
