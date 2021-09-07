@@ -7,6 +7,7 @@ let trend_line_names = [
     "LO space size",
     "New LO space size",
     "Code LO space size",
+    "Space size sum",
     "New space obj memory",
     "Map space obj memory",
     "Code space obj memory",
@@ -14,10 +15,12 @@ let trend_line_names = [
     "RO space obj memory",
     "LO space obj memory",
     "New LO space obj memory",
-    "Code LO space obj memory"
+    "Code LO space obj memory",
+    "Obj memory sum"
 ]
 
-let line_colors = page_colors.concat(page_colors);
+let tmp = page_colors.concat(['black'])
+let line_colors = tmp.concat(tmp);
 
 function DrawSizeLine(json_size_trend) {
     function GetXAxisData() {
@@ -37,7 +40,28 @@ function DrawSizeLine(json_size_trend) {
         for (let [k, v] of Object.entries(dict)) {
             for (let i = 0; i < gc_amount * 2; ++i) {
                 let key = FromIndexGetGCKey(i);
-                v[i] = json_size_trend[key][k];
+                if (k == "Space size sum") {
+                    v[i] = json_size_trend[key]["New space size"]
+                        + json_size_trend[key]["Map space size"]
+                        + json_size_trend[key]["Code space size"]
+                        + json_size_trend[key]["Old space size"]
+                        + json_size_trend[key]["RO space size"]
+                        + json_size_trend[key]["LO space size"]
+                        + json_size_trend[key]["New LO space size"]
+                        + json_size_trend[key]["Code LO space size"]
+                } else if (k == "Obj memory sum") {
+                    v[i] = json_size_trend[key]["New space obj memory"]
+                        + json_size_trend[key]["Map space obj memory"]
+                        + json_size_trend[key]["Code space obj memory"]
+                        + json_size_trend[key]["Old space obj memory"]
+                        + json_size_trend[key]["RO space obj memory"]
+                        + json_size_trend[key]["LO space obj memory"]
+                        + json_size_trend[key]["New LO space obj memory"]
+                        + json_size_trend[key]["Code LO space obj memory"]
+                }
+                else {
+                    v[i] = json_size_trend[key][k];
+                }
             }
         }
 
@@ -46,7 +70,7 @@ function DrawSizeLine(json_size_trend) {
 
     let trend_line_data_dict = GetTrendLineDataDict();
 
-    function GetTrendLineConfigData(name, color_index = null) {
+    function GetTrendLineData(name, color_index = null) {
         function GetLineColor(color_index) {
             if (color_index == null) {
                 return null;
@@ -125,7 +149,18 @@ function DrawSizeLine(json_size_trend) {
                 }
                 return [ret_x, '85%'];
             },
-            // confine: true
+            formatter: (params) => {
+                var colorSpan = color => '<span style="display:inline-block;margin-right:1px;border-radius:5px;width:9px;height:9px;background-color:' + color + '"></span>';
+                let rez = '<p>' + params[0].axisValue + '</p>';
+                //console.log(params); //quite useful for debug
+                params.forEach(item => {
+                    //console.log(item); //quite useful for debug
+                    var xx = '<p style="margin:0;">' + colorSpan(item.color) + ' ' + item.seriesName + ': ' + (item.data / 1024 / 1024).toFixed(2) + 'MB' + '</p>'
+                    rez += xx;
+                });
+
+                return rez;
+            },
         },
         legend: {
             data: trend_line_names,
@@ -142,7 +177,9 @@ function DrawSizeLine(json_size_trend) {
         yAxis: {
             type: 'value',
             axisLabel: {
-                formatter: '{value} Bytes'
+                formatter: function (value, index) {
+                    return (value / 1024 / 1024).toFixed(2) + 'MB';
+                }
             }
         },
 
@@ -152,7 +189,7 @@ function DrawSizeLine(json_size_trend) {
     };
     for (let i in trend_line_names) {
         let name = trend_line_names[i];
-        option.series.push(GetTrendLineConfigData(name, i));
+        option.series.push(GetTrendLineData(name, i));
     }
 
     option.series.push(GetMarkAreaData());
@@ -196,5 +233,5 @@ function DrawSizeLine(json_size_trend) {
 }
 
 function UpdateSizeLineChartYMarkLine(gc_key) {
-    size_line_chart.setOption({ series:0})
+    size_line_chart.setOption({ series: 0 })
 }
